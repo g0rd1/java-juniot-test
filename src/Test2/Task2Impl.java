@@ -46,7 +46,7 @@ public class Task2Impl implements IElementNumberAssigner {
     private void numbersChanger(final List<IElement> elements, final List<Integer> sortedNumbers, final int position, final List<Integer> checkedPositions) {
         // position - позиция в которой в данный момент ищем несовпадение
         // sortedNumbers - лист с отсортированными номерами элементов
-        // checkedPositions - лист позиций в которых уже искали несовпадение
+        // checkedPositions - лист позиций, в которых уже искали несовпадение
         if (sortedNumbers.get(position) != elements.get(position).getNumber()) { // Если номер элемента (в индексе position) не совпадает с номером в sortedNumbers
             final int foundPosition = indexOf(elements, sortedNumbers.get(position)); // foundPosition - позиция элемента, у которого номер
                                                                                       // совпадает с номером в sortedNumbers (в индексе position)
@@ -64,7 +64,7 @@ public class Task2Impl implements IElementNumberAssigner {
                     numbersChanger(elements, sortedNumbers, foundPosition, checkedPositions); //Вызываем этот же метод только с foundPosition в качестве position
                 }
             }
-            elements.get(position).setupNumber(sortedNumbers.get(position)); // Присваем элементу с позицией position соответствующий номер
+            elements.get(position).setupNumber(sortedNumbers.get(position)); // Присваеваем элементу с позицией position соответствующий номер
         }
     }
 
