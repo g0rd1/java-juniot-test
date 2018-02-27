@@ -54,7 +54,7 @@ public class Task2Impl implements IElementNumberAssigner {
                                                                                       // совпадает с номером в sortedNumbers (в индексе position)
             if (foundPosition != -1) {  // Если найдена позиция, в которой номер элемента совпадает с номером в sortedNumbers
                 if (checkedPositions.contains(foundPosition) || // Если foundPosition есть в checkedPositions (проверка для избежания зацикливания)
-                        checkedPositions.size() > MAX_NEST_LEVEL) { // или размер checkedPositions больше MAX_NEST_LEVEL (для избежания OutOfMemoryException)
+                        checkedPositions.size() > MAX_NEST_LEVEL) { // или размер checkedPositions больше MAX_NEST_LEVEL (для избежания StackOverflowException)
                     int uniqueNumber; // Псевдослучайное число
                     do {
                         uniqueNumber = (int) (Math.random() * Integer.MAX_VALUE + Math.random() * Integer.MIN_VALUE); // Генерируем uniqueNumber
