@@ -32,18 +32,20 @@ public class Task2Impl implements IElementNumberAssigner {
         // напишите здесь свою реализацию. Мы ждем от вас хорошо структурированного, документированного и понятного кода, работающего за разумное время.
         if (elements == null) return;
         if (elements.size() < 2) return;
+        final int MAX_NEST_LEVEL = 500;
         List<Integer> numbers = new ArrayList<>();
         for (IElement element : elements) {
             numbers.add(element.getNumber()); // Копируем все номера элементов elements в отдельный лист numbers
         }
         Collections.sort(numbers); // Сортируем numbers
         for (int i = 0; i < elements.size(); i++) {
-            numbersChanger(elements, numbers, i, new ArrayList<>());
+            numbersChanger(elements, numbers, i, new ArrayList<>(), MAX_NEST_LEVEL);
         }
 
     }
 
-    private void numbersChanger(final List<IElement> elements, final List<Integer> sortedNumbers, final int position, final List<Integer> checkedPositions) {
+    private void numbersChanger(final List<IElement> elements, final List<Integer> sortedNumbers, final int position,
+                                final List<Integer> checkedPositions, final int MAX_NEST_LEVEL) {
         // position - позиция в которой в данный момент ищем несовпадение
         // sortedNumbers - лист с отсортированными номерами элементов
         // checkedPositions - лист позиций, в которых уже искали несовпадение
@@ -51,7 +53,8 @@ public class Task2Impl implements IElementNumberAssigner {
             final int foundPosition = indexOf(elements, sortedNumbers.get(position)); // foundPosition - позиция элемента, у которого номер
                                                                                       // совпадает с номером в sortedNumbers (в индексе position)
             if (foundPosition != -1) {  // Если найдена позиция, в которой номер элемента совпадает с номером в sortedNumbers
-                if (checkedPositions.contains(foundPosition)) { // Если foundPosition есть в checkedPositions (проверка для избежания зацикливания)
+                if (checkedPositions.contains(foundPosition) || // Если foundPosition есть в checkedPositions (проверка для избежания зацикливания)
+                        checkedPositions.size() > MAX_NEST_LEVEL) { // или размер checkedPositions больше MAX_NEST_LEVEL (для избежания OutOfMemoryException)
                     int uniqueNumber; // Псевдослучайное число
                     do {
                         uniqueNumber = (int) (Math.random() * Integer.MAX_VALUE + Math.random() * Integer.MIN_VALUE); // Генерируем uniqueNumber
@@ -61,7 +64,8 @@ public class Task2Impl implements IElementNumberAssigner {
                     return;
                 } else { // Если foundPosition нет в checkedPositions
                     checkedPositions.add(position); // Добавляем position в checkedPositions
-                    numbersChanger(elements, sortedNumbers, foundPosition, checkedPositions); //Вызываем этот же метод только с foundPosition в качестве position
+                    numbersChanger(elements, sortedNumbers, foundPosition,
+                            checkedPositions, MAX_NEST_LEVEL); //Вызываем этот же метод только с foundPosition в качестве position
                 }
             }
             elements.get(position).setupNumber(sortedNumbers.get(position)); // Присваеваем элементу с позицией position соответствующий номер
